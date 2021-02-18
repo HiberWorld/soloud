@@ -31790,7 +31790,9 @@ static ma_result ma_device_init_by_type__webaudio(ma_device* pDevice, const ma_d
         */
         device.intermediaryBufferSizeInBytes = channels * bufferSize * 4;
         device.intermediaryBuffer = Module._malloc(device.intermediaryBufferSizeInBytes);
-        device.intermediaryBufferView = new Float32Array(Module.HEAPF32.buffer, device.intermediaryBuffer, device.intermediaryBufferSizeInBytes);
+        // Potential emscripten bug
+        // Memory address returned by _malloc might not be available yet so dont create buffer view yet
+        device.intermediaryBufferView = new Float32Array(Module.HEAPF32.buffer, device.intermediaryBuffer, 0);
 
         /*
         Both playback and capture devices use a ScriptProcessorNode for performing per-sample operations.

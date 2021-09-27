@@ -61,6 +61,11 @@ namespace SoLoud
 
     result miniaudio_init(SoLoud::Soloud *aSoloud, unsigned int aFlags, unsigned int aSamplerate, unsigned int aBuffer, unsigned int aChannels)
     {
+		ma_context context;
+		ma_context_config context_config = ma_context_config_init();
+		context_config.coreaudio.sessionCategory = ma_ios_session_category_solo_ambient;
+		ma_context_init(nullptr, 0, &context_config, &context);
+
         ma_device_config config = ma_device_config_init(ma_device_type_playback);
         config.periodSizeInFrames = gDevice.playback.internalPeriodSizeInFrames;
         config.playback.format    = ma_format_f32;
@@ -69,7 +74,7 @@ namespace SoLoud
         config.dataCallback       = soloud_miniaudio_audiomixer;
         config.pUserData          = (void *)aSoloud;
 
-        if (ma_device_init(NULL, &config, &gDevice) != MA_SUCCESS)
+        if (ma_device_init(&context, &config, &gDevice) != MA_SUCCESS)
         {
             return UNKNOWN_ERROR;
         }

@@ -64,7 +64,7 @@ namespace SoLoud
     result miniaudio_init(SoLoud::Soloud *aSoloud, unsigned int aFlags, unsigned int aSamplerate, unsigned int aBuffer, unsigned int aChannels)
     {
         ma_context_config context_config = ma_context_config_init();
-        context_config.coreaudio.sessionCategory = ma_ios_session_category_solo_ambient;
+        context_config.coreaudio.sessionCategory = ma_ios_session_category_ambient;
         ma_context_init(nullptr, 0, &context_config, &gContext);
 
         ma_device_config config = ma_device_config_init(ma_device_type_playback);
